@@ -1,8 +1,7 @@
 package de.zalando.sprocwrapper.example;
 
 import java.util.List;
-
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import de.zalando.sprocwrapper.example.transformer.MoneyObjectMapper;
 
@@ -34,7 +33,7 @@ public class Order {
     public Order(final String on, final OrderMonetaryAmount a, final AddressPojo address) {
         this.orderNumber = on;
         this.amount = a;
-        this.address = Optional.fromNullable(address);
+        this.address = Optional.ofNullable(address);
     }
 
     public Order() {

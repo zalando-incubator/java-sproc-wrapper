@@ -262,6 +262,9 @@ public interface ExampleSProcService {
     @SProcCall(sql = "SELECT 4 AS count, ARRAY[ROW(5)]::ztest_schema1.lookup_type_schema[] AS list")
     WrapperOptionalLookupType getOptionalLookupTypeWithoutMapping();
 
+    @SProcCall(sql = "SELECT 4 AS count, ARRAY[ROW(5)]::ztest_schema1.lookup_type_schema[] AS list")
+    WrapperGuavaOptionalLookupType getGuavaOptionalLookupTypeWithoutMapping();
+
     @SProcCall
     int testInheritanceFunction(@SProcParam TestInheritanceChild c);
 

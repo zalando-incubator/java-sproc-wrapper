@@ -1,18 +1,15 @@
 package de.zalando.sprocwrapper.example;
 
-import com.google.common.base.Optional;
-
 import de.zalando.typemapper.annotations.DatabaseField;
 import de.zalando.typemapper.annotations.DatabaseType;
 
-/**
- * @author  pribeiro
- */
+import java.util.Optional;
+
 @DatabaseType(inheritance = true)
 public class OptionalLookupType extends LookupType {
 
     @DatabaseField
-    public Optional<Integer> c = Optional.absent();
+    public Optional<Integer> c = Optional.empty();
 
     public OptionalLookupType() { }
 }

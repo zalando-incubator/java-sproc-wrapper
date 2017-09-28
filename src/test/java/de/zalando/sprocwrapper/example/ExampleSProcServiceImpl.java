@@ -415,6 +415,11 @@ public class ExampleSProcServiceImpl extends AbstractSProcService<ExampleSProcSe
     }
 
     @Override
+    public WrapperGuavaOptionalLookupType getGuavaOptionalLookupTypeWithoutMapping() {
+        return sproc.getGuavaOptionalLookupTypeWithoutMapping();
+    }
+
+    @Override
     public int testInheritanceFunction(final TestInheritanceChild c) {
         return sproc.testInheritanceFunction(c);
     }

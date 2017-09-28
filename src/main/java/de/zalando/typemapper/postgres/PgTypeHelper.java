@@ -21,14 +21,13 @@ import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
-
 import de.zalando.sprocwrapper.util.NameUtils;
 
 import de.zalando.typemapper.annotations.DatabaseField;
 import de.zalando.typemapper.annotations.DatabaseType;
 import de.zalando.typemapper.core.DatabaseFieldDescriptor;
 import de.zalando.typemapper.core.Mapping;
+import de.zalando.typemapper.core.OptionalMapper;
 import de.zalando.typemapper.core.ValueTransformer;
 import de.zalando.typemapper.core.db.DbType;
 import de.zalando.typemapper.core.db.DbTypeField;
@@ -271,7 +270,7 @@ public class PgTypeHelper {
 
                 Object value;
                 try {
-                    value = getOptionalValue(f.get(obj));
+                    value = OptionalMapper.get(f.get(obj));
                 } catch (final IllegalArgumentException e) {
                     throw new IllegalArgumentException("Could not read value of field " + f.getName(), e);
                 } catch (final IllegalAccessException e) {
@@ -348,16 +347,6 @@ public class PgTypeHelper {
             return new PgTypeDataHolder(typeName, Collections.unmodifiableCollection(resultPositionMap.values()));
         } else {
             return new PgTypeDataHolder(typeName, Collections.unmodifiableCollection(resultList));
-        }
-    }
-
-    private static Object getOptionalValue(final Object o) {
-        if (o instanceof Optional) {
-            Optional<?> optional = (Optional<?>) o;
-
-            return optional.isPresent() ? optional.get() : null;
-        } else {
-            return o;
         }
     }
 

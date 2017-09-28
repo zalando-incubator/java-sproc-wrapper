@@ -59,11 +59,13 @@ import de.zalando.sprocwrapper.example.ExampleValidationSProcService;
 import de.zalando.sprocwrapper.example.GlobalTransformedObject;
 import de.zalando.sprocwrapper.example.LookupType;
 import de.zalando.sprocwrapper.example.LookupTypeSchema;
+import de.zalando.sprocwrapper.example.GuavaOptionalLookupType;
 import de.zalando.sprocwrapper.example.OptionalLookupType;
 import de.zalando.sprocwrapper.example.Order;
 import de.zalando.sprocwrapper.example.OrderMonetaryAmountImpl;
 import de.zalando.sprocwrapper.example.OrderPosition;
 import de.zalando.sprocwrapper.example.TestInheritanceChild;
+import de.zalando.sprocwrapper.example.WrapperGuavaOptionalLookupType;
 import de.zalando.sprocwrapper.example.WrapperLookupSchema;
 import de.zalando.sprocwrapper.example.WrapperOptionalLookupType;
 import de.zalando.typemapper.parser.DateTimeUtil;
@@ -1001,6 +1003,23 @@ public class SimpleIT {
         assertEquals(1, list.size());
 
         OptionalLookupType type = list.get(0);
+        assertEquals(5, type.a);
+        assertEquals(0, type.b);
+        assertNotNull(type.c);
+        assertFalse(type.c.isPresent());
+    }
+
+    @Test
+    public void testGuavaOptionalValueWithoutMapping() {
+        WrapperGuavaOptionalLookupType result = exampleSProcService.getGuavaOptionalLookupTypeWithoutMapping();
+        assertNotNull(result);
+        assertEquals(4, result.count);
+
+        List<GuavaOptionalLookupType> list = result.list;
+        assertNotNull(list);
+        assertEquals(1, list.size());
+
+        GuavaOptionalLookupType type = list.get(0);
         assertEquals(5, type.a);
         assertEquals(0, type.b);
         assertNotNull(type.c);

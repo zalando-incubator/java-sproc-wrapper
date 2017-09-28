@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.common.base.Optional;
-
 import de.zalando.sprocwrapper.util.NameUtils;
 
 import de.zalando.typemapper.annotations.Embed;
@@ -114,7 +112,7 @@ public class Mapping {
     }
 
     public boolean isOptionalField() {
-        return Optional.class.isAssignableFrom(field.getType());
+        return OptionalMapper.isOptional(field.getType());
     }
 
     public Class<? extends ValueTransformer<?, ?>> getValueTransformer() {
@@ -201,31 +199,25 @@ public class Mapping {
 
     public void map(final Object target, Object value) throws IllegalArgumentException, IllegalAccessException,
         InvocationTargetException, InstantiationException {
-        if (isOptionalField()) {
-            value = Optional.fromNullable(value);
-        }
 
+        value = OptionalMapper.map(field.getType(), value);
+
+        final Object subject;
         if (embed) {
             Object embedValue = getEmbedFieldValue(target);
             if (embedValue == null) {
                 embedValue = initEmbed(target);
             }
-
-            final Method setter = getSetter();
-            if (setter != null) {
-                setter.invoke(embedValue, value);
-            } else {
-                getField().setAccessible(true);
-                getField().set(embedValue, value);
-            }
+            subject = embedValue;
         } else {
-            final Method setter = getSetter();
-            if (setter != null) {
-                setter.invoke(target, value);
-            } else {
-                getField().setAccessible(true);
-                getField().set(target, value);
-            }
+            subject = target;
+        }
+        final Method setter = getSetter();
+        if (setter != null) {
+            setter.invoke(subject, value);
+        } else {
+            getField().setAccessible(true);
+            getField().set(subject, value);
         }
     }
 
@@ -246,15 +238,9 @@ public class Mapping {
 
     private Object getEmbedFieldValue(final Object target) throws IllegalArgumentException, IllegalAccessException,
         InvocationTargetException {
-        final Method setter = getGetter(embedField);
-        Object result = null;
-        if (setter != null) {
-            result = setter.invoke(target);
-        } else {
-            result = embedField.get(target);
-        }
+        final Method getter = getGetter(embedField);
 
-        return result;
+        return getter != null ? getter.invoke(target) : embedField.get(target);
     }
 
     @Override
