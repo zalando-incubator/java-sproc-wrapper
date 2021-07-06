@@ -154,6 +154,8 @@ You can find some more information about the SProcWrapper in our various Zalando
 * http://tech.zalando.com/blog/zalando-stored-procedure-wrapper-part-i/
 * http://tech.zalando.com/blog/files/2013/04/jug_dortmund_april_2013.pdf
 
+🚨 Upgrading from 2.x to 3.x? Please be aware that default scanning package for custom objectTransformer has changed from `de.zalando` to `org.zalando`.
+
 ## Contributing
 
 See [contributing guideline](CONTRIBUTING.md).
